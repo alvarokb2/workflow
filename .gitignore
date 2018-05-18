@@ -1,0 +1,14 @@
+/*
+!/app
+
+!/config
+/config/database
+
+!/database
+!/public
+!/resources
+!/routes
+!/storage
+
+!.gitignore
+!composer.json
