@@ -9,6 +9,10 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public function roles(){
+        return $this->belongsToMany('Workflow\Role');
+    }
+
     /**
      * The attributes that are mass assignable.
      *
