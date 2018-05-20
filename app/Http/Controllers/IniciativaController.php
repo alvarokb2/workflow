@@ -3,9 +3,15 @@
 namespace Workflow\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Redirect;
 class IniciativaController extends Controller
 {
+    
+    public function __construct(){
+        $this->middleware('verify.role');
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -24,6 +30,7 @@ class IniciativaController extends Controller
     public function create()
     {
         //
+        echo 'otrawea';
     }
 
     /**
@@ -80,5 +87,9 @@ class IniciativaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function denegated(){
+        return Redirect::route('home');
     }
 }
