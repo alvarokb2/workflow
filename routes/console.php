@@ -41,10 +41,10 @@ Artisan::command('test {--reset_db}', function ($reset_db) {
         $db->run();
     }
 
-    $user1 = User::find(1);
+    $user1 = User::find(3);
     echo "- user: " . $user1->name . "\n";
-//    echo "  - roles():\n";
-//    print_roles($user1->roles(), 2);
+    echo "  - roles():\n";
+    print_roles($user1->roles(), 2);
     echo "  - permisos():\n";
     print_permisos($user1->permisos(), 2);
 

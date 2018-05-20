@@ -4,10 +4,12 @@ namespace Workflow\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Redirect;
+
 class IniciativaController extends Controller
 {
-    
-    public function __construct(){
+
+    public function __construct()
+    {
         $this->middleware('verify.role');
     }
 
@@ -20,6 +22,7 @@ class IniciativaController extends Controller
     public function index()
     {
         //
+        echo 'acceso a index OK';
     }
 
     /**
@@ -30,13 +33,13 @@ class IniciativaController extends Controller
     public function create()
     {
         //
-        echo 'otrawea';
+        echo "acceso a create OK\n";
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -47,7 +50,7 @@ class IniciativaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -58,7 +61,7 @@ class IniciativaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -69,8 +72,8 @@ class IniciativaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -81,7 +84,7 @@ class IniciativaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -89,7 +92,9 @@ class IniciativaController extends Controller
         //
     }
 
-    public function denegated(){
-        return Redirect::route('home');
+    public function denegated()
+    {
+        echo "denegated\n";
+        return redirect()->back();
     }
 }
