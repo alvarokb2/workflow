@@ -21,9 +21,10 @@ class CreateIniciativasTable extends Migration
             $table->string('producto_esperado');
             $table->string('estado');
 
-            $table->integer('_id')->unsigned()->nullable();
+            $table->unsignedInteger('user_id')->nullable();
+
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            
+
             $table->timestamps();
         });
     }

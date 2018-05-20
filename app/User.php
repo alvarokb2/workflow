@@ -9,7 +9,8 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany('Workflow\Role');
     }
 
@@ -30,4 +31,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public static function new_user($name, $email, $password)
+    {
+        $user = User::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt($password),
+        ]);
+        $user->save();
+        return $user;
+    }
 }

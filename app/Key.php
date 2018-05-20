@@ -8,8 +8,20 @@ class Key extends Model
 {
     //
 
-	public function roles(){
-		return $this->belongsToMany('Workflow\Role');
-	}
+    protected $fillable = ['name', 'pattern'];
 
+    public function roles()
+    {
+        return $this->belongsToMany('Workflow\Role');
+    }
+
+    public static function new_key($name, $pattern)
+    {
+        $key = Key::create([
+            'name' => $name,
+            'pattern' => $pattern
+        ]);
+        $key->save();
+        return $key;
+    }
 }
