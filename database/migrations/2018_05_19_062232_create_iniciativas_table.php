@@ -21,7 +21,7 @@ class CreateIniciativasTable extends Migration
             $table->string('producto_esperado');
             $table->string('estado');
 
-            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('user_id');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
