@@ -59,5 +59,6 @@ class Kernel extends HttpKernel
         'guest' => \Workflow\Http\Middleware\RedirectIfAuthenticated::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'verify.role' => \Workflow\Http\Middleware\VerifyRole::class,
     ];
 }
