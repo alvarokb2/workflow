@@ -23,13 +23,7 @@ class IniciativaController extends Controller
      */
     public function index()
     {
-        //
-        $iniciativa = Iniciativa::first();
-        $r = new PublicacionIniciativasController();
-        echo $iniciativa->estado.'<br>';
-        $r->set_estado($iniciativa, 'a');
-        echo '<br>'.$iniciativa->estado.'<br>';
-        
+        //        
     }
 
     /**
@@ -39,9 +33,7 @@ class IniciativaController extends Controller
      */
     public function create()
     {
-        //
-        echo "acceso a create OK\n";
-    }
+        //}
 
     /**
      * Store a newly created resource in storage.
@@ -86,6 +78,15 @@ class IniciativaController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $iniciativa = Iniciativa::find($id);
+        $iniciativa->nombre = $request->nombre;
+        $iniciativa->descripcion = $request->descripcion;
+        $iniciativa->producto_esperado = $request->producto_esperado;
+        $iniciativa->save();
+
+        $p = new PublicacionIniciativasController();
+        $p->set_estado(Iniciativa::find($request->id), 'a');   
+        return $p;
     }
 
     /**
@@ -97,11 +98,39 @@ class IniciativaController extends Controller
     public function destroy($id)
     {
         //
+        $iniciativa = Iniciativa::find($id);
+        $iniciativa->delete();
     }
 
     public function denegated()
     {
         echo "denegated\n";
         return redirect()->back();
+    }
+
+    public function validar_dic($request){
+        if($request->value){
+            $estado = 'b';}
+        else{
+            $estado = 'c';}
+        $p = new PublicacionIniciativasController();
+        $p->set_estado(Iniciativa::find($request->id), $estado);   
+        return $p;
+    }
+
+    public function validar_ei($request){
+    if($request->value){
+            $estado = 'd';}
+        else{
+            $estado = 'e';}
+        $p = new PublicacionIniciativasController();
+        $p->set_estado(Iniciativa::find($request->id), $estado);   
+        return $p;
+    }
+
+    public function publicar($resquest){
+        $p = new PublicacionIniciativasController();
+        $p->set_estado(Iniciativa::find($request->id), 'f');
+        return $p;
     }
 }

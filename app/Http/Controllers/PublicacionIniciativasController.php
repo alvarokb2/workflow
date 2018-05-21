@@ -45,16 +45,20 @@ class PublicacionIniciativasController extends Controller
     }
 
     public function set_estado($iniciativa, $nuevo_estado){
+    	echo 'estado_inicial: '.$iniciativa->estado.'<br>'.
+    	'nuevo_estado: '.$nuevo_estado.'<br>';
     	if(strlen($nuevo_estado) != 1) return false;
     	$estado_actual = $iniciativa->get_estado();
     	foreach(PublicacionIniciativasController::$tabla_estados as $estado){
     		if(preg_match($estado['validar_out'], $nuevo_estado)){
     			if(preg_match($estado['validar_in'], $estado_actual)){
     				$iniciativa->add_estado($nuevo_estado);
+    				echo 'la maquina ha cambiado de estado con exito a: '.$nuevo_estado.' desde: '.$iniciativa->estado;
     				return true;
     			}	
     		}
     	}
+    	echo 'la maquina no ha podido cambiar al estado: '.$nuevo_estado.' desde: '.$iniciativa->estado;
     	return false;
     }
 }
