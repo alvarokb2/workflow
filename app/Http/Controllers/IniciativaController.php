@@ -12,7 +12,7 @@ class IniciativaController extends Controller
 
     public function __construct()
     {
-        $this->middleware('verify.role');
+        //$this->middleware('verify.role');
     }
 
 
@@ -23,7 +23,8 @@ class IniciativaController extends Controller
      */
     public function index()
     {
-        //        
+        //
+
     }
 
     /**
@@ -33,7 +34,8 @@ class IniciativaController extends Controller
      */
     public function create()
     {
-        //}
+    
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -100,6 +102,7 @@ class IniciativaController extends Controller
         //
         $iniciativa = Iniciativa::find($id);
         $iniciativa->delete();
+        return redirect->back();
     }
 
     public function denegated()
