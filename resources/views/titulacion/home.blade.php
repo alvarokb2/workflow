@@ -21,7 +21,7 @@
                                                 </button>
                                             </div>
                                             <div id="collapse{{ $proceso->id }}"
-                                                 class="collapse"
+                                                 class="collapse{{ $procesos->first()->id == $proceso->id ? ' show' : '' }}"
                                                  aria-labelledby="head{{ $proceso->id }}"
                                                  data-parent="#accordion_procesos">
                                                 <div class="card-body">
@@ -43,7 +43,7 @@
                                                                 </div>
                                                                 <div
                                                                     id="collapse{{ $proceso->id . "_" . $iniciativa->id }}"
-                                                                    class="collapse"
+                                                                    class="collapse{{ $proceso->iniciativas()->first()->id == $iniciativa->id ? ' show' : '' }}"
                                                                     aria-labelledby="head{{ $proceso->id . "_" . $iniciativa->id }}"
                                                                     data-parent="accordion{{ $proceso->id }}">
                                                                     {{--Cuerpo--}}
@@ -103,7 +103,7 @@
                                                                                 {{--Contenedor Ver Estado--}}
                                                                                 <div
                                                                                     id="collapse_estado{{ $proceso->id . "_" . $iniciativa->id }}"
-                                                                                    class="collapse"
+                                                                                    class="collapse show"
                                                                                     aria-labelledby="collapse_estado{{ $proceso->id . "_" . $iniciativa->id }}"
                                                                                     data-parent="#accordion_menu{{ $proceso->id . "_" . $iniciativa->id }}">
                                                                                     <div class="alert alert-info">
@@ -122,34 +122,32 @@
                                                                                         Editar
                                                                                         <hr>
                                                                                         {!! Form::open(['route' => ['iniciativa.update', $iniciativa->id], 'method' => 'PUT']) !!}
-                                                                                        {!! Form::text('nombre') !!}
-                                                                                        {!! Form::text('descripcion') !!}
-                                                                                        {!! Form::text('producto_esperado') !!}
+                                                                                        {!! Form::hidden('id', $iniciativa->id) !!}
+                                                                                        {!! Form::text('nombre', $iniciativa->nombre, ['class'=>'form-control', 'placeholder' => 'nombre']) !!}
+                                                                                        {!! Form::text('descripcion', $iniciativa->descripcion, ['class'=>'form-control', 'placeholder' => 'descripcion']) !!}
+                                                                                        {!! Form::text('producto_esperado', $iniciativa->producto_esperado, ['class'=>'form-control', 'placeholder' => 'producto esperado']) !!}
                                                                                         {!! Form::submit('Guardar', ['class' => 'btn btn-primary']) !!}
                                                                                         {!! Form::close() !!}
                                                                                     </div>
                                                                                 </div>
                                                                                 {{--Vaidacion DIC--}}
                                                                                 <div
-                                                                                    id="collapse_val_dic{{ $proceso->id . "_" . $iniciativa->id }}"
-                                                                                    class="collapse"
-                                                                                    aria-labelledby="collapse_val_dic{{ $proceso->id . "_" . $iniciativa->id }}"
-                                                                                    data-parent="#accordion_menu{{ $proceso->id . "_" . $iniciativa->id }}">
-                                                                                    <div class="alert alert-info">
-                                                                                        Validación DIC
-                                                                                        <hr>
-                                                                                        ¿ Esta seguro que desea validar
-                                                                                        la
-                                                                                        iniciativa ?
-                                                                                        <br><br>
-                                                                                        {!! Form::open(['route' => ['name' => 'iniciativa.validar_dic', 'value' => true], 'method' => 'GET']) !!}
-                                                                                        {!! Form::submit('Aceptar', ['class' => 'btn btn-primary']) !!}
-                                                                                        {!! Form::close() !!}
-
-                                                                                        {!! Form::open(['route' => ['name' => 'iniciativa.validar_dic', 'value' => false], 'method' => 'GET']) !!}
-                                                                                        {!! Form::submit('Rechazar', ['class' => 'btn btn-primary']) !!}
-                                                                                        {!! Form::close() !!}
-                                                                                    </div>
+                                                                                id="collapse_val_dic{{ $proceso->id . "_" . $iniciativa->id }}"
+                                                                                class="collapse"
+                                                                                aria-labelledby="collapse_val_dic{{ $proceso->id . "_" . $iniciativa->id }}"
+                                                                                data-parent="#accordion_menu{{ $proceso->id . "_" . $iniciativa->id }}">
+                                                                                <div class="alert alert-info">
+                                                                                Validación DIC
+                                                                                <hr>
+                                                                                ¿ Esta seguro que desea validar
+                                                                                la
+                                                                                iniciativa ?
+                                                                                <br><br>
+                                                                                    <a href="{{ route('iniciativa.validar_dic', ['id' => $iniciativa->id, 'value' => true]) }}"
+                                                                                       class="btn btn-primary">Aceptar</a>
+                                                                                    <a href="{{ route('iniciativa.validar_dic', ['id' => $iniciativa->id, 'value' => false]) }}"
+                                                                                       class="btn btn-primary">Rechazar</a>
+                                                                                </div>
                                                                                 </div>
                                                                                 {{--Vaidacion EI--}}
                                                                                 <div
@@ -164,13 +162,10 @@
                                                                                         la
                                                                                         iniciativa ?
                                                                                         <br><br>
-                                                                                        {!! Form::open(['route' => ['name' => 'iniciativa.validar_ei', 'value' => true], 'method' => 'GET']) !!}
-                                                                                        {!! Form::submit('Aceptar', ['class' => 'btn btn-primary']) !!}
-                                                                                        {!! Form::close() !!}
-
-                                                                                        {!! Form::open(['route' => ['name' => 'iniciativa.validar_ei', 'value' => false], 'method' => 'GET']) !!}
-                                                                                        {!! Form::submit('Rechazar', ['class' => 'btn btn-primary']) !!}
-                                                                                        {!! Form::close() !!}
+                                                                                        <a href="{{ route('iniciativa.validar_ei', ['id' => $iniciativa->id, 'value' => true]) }}"
+                                                                                           class="btn btn-primary">Aceptar</a>
+                                                                                        <a href="{{ route('iniciativa.validar_ei', ['id' => $iniciativa->id, 'value' => false]) }}"
+                                                                                           class="btn btn-primary">Rechazar</a>
                                                                                     </div>
                                                                                 </div>
                                                                                 {{--Publicar--}}
@@ -186,9 +181,11 @@
                                                                                         la
                                                                                         iniciativa ?
                                                                                         <br><br>
-                                                                                        {!! Form::open(['route' => ['name' => 'iniciativa.publicar'], 'method' => 'GET']) !!}
-                                                                                        {!! Form::submit('Aceptar', ['class' => 'btn btn-primary']) !!}
-                                                                                        {!! Form::close() !!}
+                                                                                        <a href="{{ route('iniciativa.publicar', ['id' => $iniciativa->id]) }}"
+                                                                                           class="btn btn-primary">Aceptar</a>
+                                                                                        {{--{!! Form::open(['route' => ['name' => 'iniciativa.publicar', ['id' => $iniciativa->id]], 'method' => 'GET']) !!}--}}
+                                                                                        {{--{!! Form::submit('Aceptar', ['class' => 'btn btn-primary']) !!}--}}
+                                                                                        {{--{!! Form::close() !!}--}}
                                                                                     </div>
                                                                                 </div>
                                                                                 {{--Eliminar--}}
