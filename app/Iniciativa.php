@@ -28,4 +28,14 @@ class Iniciativa extends Model
         $iniciativa->save();
         return $iniciativa;
     }
+
+    public function add_estado($nuevo_estado){
+        $this->estado = $this->estado . $nuevo_estado;
+        $this->save();
+        return $this->estado;
+    }
+
+    public function get_estado(){
+        return $this->estado;
+    }
 }

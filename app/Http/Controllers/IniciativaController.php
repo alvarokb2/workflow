@@ -4,6 +4,8 @@ namespace Workflow\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Redirect;
+use Workflow\Http\Controllers\PublicacionIniciativasController;
+use Workflow\Iniciativa;
 
 class IniciativaController extends Controller
 {
@@ -22,7 +24,12 @@ class IniciativaController extends Controller
     public function index()
     {
         //
-        echo 'acceso a index OK';
+        $iniciativa = Iniciativa::first();
+        $r = new PublicacionIniciativasController();
+        echo $iniciativa->estado.'<br>';
+        $r->set_estado($iniciativa, 'a');
+        echo '<br>'.$iniciativa->estado.'<br>';
+        
     }
 
     /**
