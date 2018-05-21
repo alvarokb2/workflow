@@ -3,6 +3,7 @@
 namespace Workflow\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Workflow\Proceso_titulacion;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('home', ['procesos' => Proceso_titulacion::all()]);
     }
 }

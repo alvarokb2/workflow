@@ -8,6 +8,6 @@ class Proceso_titulacion extends Model
 {
     //
     public function iniciativas(){
-    	return $this->hasMany('Workflow\Iniciativa');
+    	return Iniciativa::all();//$this->hasMany('Workflow\Iniciativa');
     }
 }
