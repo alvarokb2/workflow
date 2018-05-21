@@ -3,6 +3,7 @@
 namespace Workflow;
 
 use Illuminate\Database\Eloquent\Model;
+use Workflow\Http\Controllers\PublicacionIniciativasController;
 
 class Iniciativa extends Model
 {
@@ -36,6 +37,7 @@ class Iniciativa extends Model
     }
 
     public function get_estado(){
-        return $this->estado;
+        $r = new PublicacionIniciativasController();
+        return $r->get_estado($this);
     }
 }

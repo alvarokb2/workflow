@@ -109,7 +109,7 @@
                                                                                     <div class="alert alert-info">
                                                                                         Estado: {{ $iniciativa->estado }}
                                                                                         <br>
-                                                                                        Descripcion: {{ 'TODO' }}
+                                                                                        Descripcion: {{ $iniciativa->get_estado() }}
                                                                                     </div>
                                                                                 </div>
                                                                                 {{--Contenedor Editar--}}
@@ -121,7 +121,7 @@
                                                                                     <div class="alert alert-info">
                                                                                         Editar
                                                                                         <hr>
-                                                                                        {!! Form::open(['route' => ['iniciativa.edit', $iniciativa->id], 'method' => 'PUT']) !!}
+                                                                                        {!! Form::open(['route' => ['iniciativa.update', $iniciativa->id], 'method' => 'PUT']) !!}
                                                                                         {!! Form::text('nombre') !!}
                                                                                         {!! Form::text('descripcion') !!}
                                                                                         {!! Form::text('producto_esperado') !!}
