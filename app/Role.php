@@ -19,7 +19,7 @@ class Role extends Model
 
     public function keys()
     {
-        return $this->belongsToMany('Workflow\Key');
+        return $this->belongsToMany('Workflow\Key')->withTimestamps();
     }
 
     //FUNCIONES MODELO DE ARBOL

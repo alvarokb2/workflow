@@ -19,7 +19,7 @@
             <hr>
             {{--Iniciativas--}}
             <div class="accordion" id="accordion_iniciativas{{ $proceso->id }}">
-                @foreach($proceso->iniciativas() as $iniciativa)
+                @foreach($proceso->iniciativas()->get() as $iniciativa)
                     @include('iniciativa.home')
                 @endforeach
             </div>

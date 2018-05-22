@@ -16,7 +16,7 @@ class PublicacionIniciativasController extends Controller
     private static $tabla_estados = [
         ['validar_in' => '/^$/', 'validar_out' => '/^$/',
             'value' => 'Iniciativa creada con exito'],
-
+        
         ['validar_in' => '/^$|[ce]$/', 'validar_out' => '/a$/',
             'value' => 'La iniciativa ha sido actualizada'],
 
@@ -34,34 +34,32 @@ class PublicacionIniciativasController extends Controller
 
         ['validar_in' => '/d$/', 'validar_out' => '/f$/',
             'value' => 'Iniciativa Publicada']
+
+        ['validar_in' => '/^$|[ce]$/', 'validar_out' => '/g$/',
+            'value' => 'Iniciativa eliminada con exito'],
+        
     ];
 
-    public function get_estado($iniciativa)
+    public function get_estado($estado)
     {
-        $cadena = $iniciativa->estado;
-        foreach (PublicacionIniciativasController::$tabla_estados as $estado) {
-            if (preg_match($estado['validar_out'], $cadena)) {
-                return $estado['value'];
+        foreach (PublicacionIniciativasController::$tabla_estados as $e) {
+            if (preg_match($e['validar_out'], $estado)) {
+                return $e['value'];
             }
         }
     }
 
-    public function set_estado($iniciativa, $nuevo_estado)
+    public function set_estado($estado_actual, $nuevo_estado)
     {
-        echo 'estado_inicial: ' . $iniciativa->estado . '<br>' .
-            'nuevo_estado: ' . $nuevo_estado . '<br>';
         if (strlen($nuevo_estado) != 1) return false;
-        $estado_actual = $iniciativa->estado;
         foreach (PublicacionIniciativasController::$tabla_estados as $estado) {
             if (preg_match($estado['validar_out'], $nuevo_estado)) {
                 if (preg_match($estado['validar_in'], $estado_actual)) {
                     $iniciativa->add_estado($nuevo_estado);
-                    echo 'la maquina ha cambiado de estado con exito a: ' . $nuevo_estado . ' desde: ' . $iniciativa->estado . '<br>';
                     return true;
                 }
             }
         }
-        echo 'la maquina no ha podido cambiar al estado: ' . $nuevo_estado . ' desde: ' . $iniciativa->estado . '<br>';
         return false;
     }
 }

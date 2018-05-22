@@ -14,7 +14,7 @@ class Iniciativa extends Model
     //
     public function proceso_titulacion()
     {
-        return $this->belongsTo('Workflow\Proceso_titulacion');
+        return $this->belongsToMany('Workflow\Proceso_titulacion');
     }
 
     public static function crear($user_id, $nombre, $descripcion = '', $producto_esperado = '')
