@@ -26,11 +26,11 @@ class VerifyRole
                 return $next($request);
             }
         }
-        try {
-            $controller = explode('@', $action);
+        $controller = explode('@', $action);
+        if (method_exists($controller[0], 'denegated')) {
             return app()->call($controller[0] . '@denegated');
-        } catch (\Exception $e) {
-            return redirect()->back();
+        } else {
+            return response('Error');
         }
     }
 
@@ -40,9 +40,9 @@ class VerifyRole
         $aux1 = '';
         $aux2 = null;
         foreach ($permisos as $permiso) {
-            $r = preg_match('/((?:.*?\\\)*)(' . $permiso['pattern'] . ')$/', $pattern);
+            $r = preg_match('/((?:.*?\\\)*)(' . preg_quote($permiso['pattern']) . ')$/', $pattern);
             if ($r) {
-                if (is_null($aux2)) $aux2 = $permiso['owner_id'];
+                $aux2 = $aux2 ?: $permiso['owner_id'];
                 if ($permiso['owner_id'] != $aux2) {
                     $aux1 = $aux1 . '|';
                     $aux2 = $permiso['owner_id'];
