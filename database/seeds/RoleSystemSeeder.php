@@ -8,62 +8,30 @@ class RoleSystemSeeder extends Seeder
 {
 	private static $root = 'Workflow\Http\Controllers\\';
 
-	// usar name del padre como id_owner
 	private static $roles = [
-    	['name' => 'Direccion DIC', 'information' => '',
-    	'name_owner' => null],
-    	
-    	['name' => 'Direccion EI',	'information' => '',
-    	'name_owner' => null],
-    	
-    	['name' => 'Jefe de Carrera', 'information' => '',
-    	'name_owner' => null],
-    	
-    	['name' => 'Academicos DIC', 'information' => '',
-    	'name_owner' => null],
-    	
-    	['name' => 'Comision de titulacion', 'information' => '',
-    	'name_owner' => null],
-    	
-    	['name' => 'Profesor guia',	'information' => '',
-    	'name_owner' => null],
-
-		['name' => 'Alumno', 'information' => '',
-    	'name_owner' => null],    	
+    	1 => ['name' => 'Direccion DIC', 'information' => '', 'name_owner' => null],
+    	2 => ['name' => 'Direccion EI',	'information' => '', 'name_owner' => null],
+    	3 => ['name' => 'Jefe de Carrera', 'information' => '', 'name_owner' => null],
+    	4 => ['name' => 'Academicos DIC', 'information' => '', 'name_owner' => null],
+    	5 => ['name' => 'Comision de titulacion', 'information' => '', 'name_owner' => null],
+    	6 => ['name' => 'Profesor guia',	'information' => '', 'name_owner' => null],
+		7 => ['name' => 'Alumno', 'information' => '', 'name_owner' => null],
 	];
 
     private static $keys = [
-    	['name' => 'Actualizar iniciativa',
-    	'pattern' => 'Iniciativa@update'],
-    	
-    	['name' => 'Eliminar iniciativa',
-    	'pattern' => 'Iniciativa@destroy'],
-    	
-    	['name' => 'DIC Validar iniciativa', 
-    	'pattern' => 'Iniciativa@validar_dic'],
-    	
-    	['name' => 'EI Validar iniciativa',
-    	'pattern' => 'Iniciativa@validar_ei'],
-    	
-    	['name' => 'Publicar iniciativa',
-    	'pattern' => 'Iniciativa@publicar'],
+    	['name' => 'Actualizar iniciativa', 'pattern' => 'IniciativaController@update'],
+    	['name' => 'Eliminar iniciativa', 'pattern' => 'IniciativaController@destroy'],
+    	['name' => 'DIC Validar iniciativa', 'pattern' => 'IniciativaController@validar_dic'],
+    	['name' => 'EI Validar iniciativa', 'pattern' => 'IniciativaController@validar_ei'],
+    	['name' => 'Publicar iniciativa', 'pattern' => 'IniciativaController@publicar'],
 	];
 
 	private static $asignaciones = [
-		['role_name' => 'Academicos DIC', 'key_pattern' => 'Iniciativa@update',
-		'value' => true],
-		['role_name' => 'Academicos DIC', 'key_pattern' => 'Iniciativa@destroy',
-		'value' => true],
-		
-		['role_name' => 'Direccion DIC', 'key_pattern' => 'Iniciativa@validar_dic',
-		'value' => true],
-
-		['role_name' => 'Direccion EI', 'key_pattern' => 'Iniciativa@validar_ei',
-		'value' => true],
-
-		['role_name' => 'Direccion EI', 'key_pattern' => 'Iniciativa@publicar',
-		'value' => true],
-
+		['role_name' => 'Academicos DIC', 'key_pattern' => 'IniciativaController@update', 'value' => true],
+		['role_name' => 'Academicos DIC', 'key_pattern' => 'IniciativaController@destroy', 'value' => true],
+		['role_name' => 'Direccion DIC', 'key_pattern' => 'IniciativaController@validar_dic', 'value' => true],
+		['role_name' => 'Direccion EI', 'key_pattern' => 'IniciativaController@validar_ei', 'value' => true],
+		['role_name' => 'Direccion EI', 'key_pattern' => 'IniciativaController@publicar', 'value' => true],
 	];
 
     /**
@@ -76,16 +44,16 @@ class RoleSystemSeeder extends Seeder
         //
 //    	DB::table('role_user')->truncate();
 //    	DB::table('key_role')->truncate();
-    	Key::whereNotNull('id')->delete();
-    	Role::whereNotNull('id')->delete();
-    	
+//    	Key::whereNotNull('id')->delete();
+//    	Role::whereNotNull('id')->delete();
+
         $this->register_roles();
         $this->register_keys();
         $this->register_asignaciones();
     }
 
     public function register_roles(){
-    	foreach (RoleSystemSeeder::$roles as $role) {	
+    	foreach (RoleSystemSeeder::$roles as $role) {
         	if($role['name_owner'] != null){
         		$owner = Role::where('name', $role['name_owner'])->first();
         		$owner->add_role($role['name'], $role['information']);
@@ -97,7 +65,7 @@ class RoleSystemSeeder extends Seeder
     }
 
 	public function register_keys(){
-    	foreach (RoleSystemSeeder::$keys as $key) {	
+    	foreach (RoleSystemSeeder::$keys as $key) {
         	Key::new_key($key['name'], RoleSystemSeeder::$root . $key['pattern']);
         }
     }

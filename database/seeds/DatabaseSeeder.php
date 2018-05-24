@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 use Workflow\Role;
-use Workflow\Key;
 use Workflow\User;
 
 class DatabaseSeeder extends Seeder
@@ -14,20 +13,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        echo "  - UserSeeder.\n";
+        $this->call(UserSeeder::class);
+        echo "  - TitulacionesSeeder.\n";
+        $this->call(TitulacionesSeeder::class);
+        echo "  - IniciativasSeeder.\n";
+        $this->call(IniciativasSeeder::class);
 
-        // Creamos usuarios de prueba
-        echo 'borrando usuarios actuales.\n';
-        User::whereNotNull('id')->delete();
-
-        echo "creando usuarios de prueba.\n";
-        $user1 = User::new_user('123', '123@123.123', '123123');
-        $user2 = User::new_user('qwe', 'qwe@qwe.qwe', 'qwe');
+        echo "  - RoleSystemSeeder.\n";
+        $this->call(RoleSystemSeeder::class);
 
 
-        //test role
-        $user1->roles()->save(Role::where('name', 'Direccion DIC')->first());
-        $user1->roles()->save(Role::where('name', 'Academicos DIC')->first());
-        $user2->roles()->save(Role::where('name', 'Direccion EI')->first());
+        User::find(1)->roles()->save(Role::where('name', 'Direccion DIC')->first());
+        User::find(1)->roles()->save(Role::where('name', 'Academicos DIC')->first());
+        User::find(2)->roles()->save(Role::where('name', 'Direccion EI')->first());
     }
 }

@@ -81,14 +81,16 @@ class IniciativaController extends Controller
     {
         //
         $iniciativa = Iniciativa::find($id);
-        $iniciativa->nombre = $request->nombre;
-        $iniciativa->descripcion = $request->descripcion;
-        $iniciativa->producto_esperado = $request->producto_esperado;
+        $nuevo_estado = $iniciativa->estado . 'a';
         $p = new PublicacionIniciativasController();
-        if ($p->set_estado(Iniciativa::find($id)->estado, 'a')) {
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
+            $iniciativa->nombre = $request->nombre;
+            $iniciativa->descripcion = $request->descripcion ?: '';
+            $iniciativa->producto_esperado = $request->producto_esperado ?: '';
+            $iniciativa->estado = $nuevo_estado;
             $iniciativa->save();
         }
-        return;
+        return redirect('home');
     }
 
     /**
@@ -101,37 +103,52 @@ class IniciativaController extends Controller
     {
         //
         $iniciativa = Iniciativa::find($id);
+        $nuevo_estado = $iniciativa->estado . 'g';
         $p = new PublicacionIniciativasController();
-        if ($p->set_estado(Iniciativa::find($id)->estado, 'g')) {
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
             $iniciativa->delete();
-        }    
-    return redirect()->back();
+        }
+        return redirect('home');
     }
 
     public function denegated()
     {
-        echo "denegated\n";
-        return redirect()->back();
+        return response('acceso denefado.');
     }
 
     public function validar_dic(Request $request)
     {
+        $iniciativa = Iniciativa::find($request->id);
+        $nuevo_estado = $iniciativa->estado . ($request->value ? 'b' : 'c');
         $p = new PublicacionIniciativasController();
-        $p->set_estado(Iniciativa::find($request->id)->estado, $request->value ? 'b':'c');
-        return;
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
+            $iniciativa->estado = $nuevo_estado;
+            $iniciativa->save();
+        }
+        return redirect('home');
     }
 
     public function validar_ei(Request $request)
     {
+        $iniciativa = Iniciativa::find($request->id);
+        $nuevo_estado = $iniciativa->estado . ($request->value ? 'd' : 'e');
         $p = new PublicacionIniciativasController();
-        $p->set_estado(Iniciativa::find($request->id)->estado, $request->value ? 'd':'e');
-        return;
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
+            $iniciativa->estado = $nuevo_estado;
+            $iniciativa->save();
+        }
+        return redirect('home');
     }
 
     public function publicar(Request $request)
     {
+        $iniciativa = Iniciativa::find($request->id);
+        $nuevo_estado = $iniciativa->estado . 'f';
         $p = new PublicacionIniciativasController();
-        $p->set_estado(Iniciativa::find($request->id)->estado, 'f');
-        return;
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
+            $iniciativa->estado = $nuevo_estado;
+            $iniciativa->save();
+        }
+        return redirect('home');
     }
 }

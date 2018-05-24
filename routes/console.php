@@ -22,32 +22,20 @@ Artisan::command('inspire', function () {
 Artisan::command('test {--reset_db}', function ($reset_db) {
 
     if ($reset_db) {
-        // eliminamos todas las tablas de la DB
-        echo "Eliminando tablas de la DB...\n";
+
+        echo "- Eliminando tablas de la DB...\n";
         $tables = DB::select('SHOW TABLES');
         foreach ($tables as $table) {
             $table_array = get_object_vars($table);
             Schema::drop($table_array[key($table_array)]);
         }
 
-        // realizamos la migracion de las tablas
-        echo "Migrando la DB...\n";
+        echo "- Migrando la DB...\n";
         Artisan::call('migrate');
 
-        // creamos un usuario
-        //
-        echo "Ejecutando DatabaseSeeder...\n";
-        $db = new DatabaseSeeder();
-        $db->run();
+        echo "- Ejecutando DatabaseSeeder...\n";
+        Artisan::call('db:seed', ['--class' => 'DatabaseSeeder']);
     }
-
-    $user1 = User::find(3);
-    echo "- user: " . $user1->name . "\n";
-    echo "  - roles():\n";
-    print_roles($user1->roles(), 2);
-    echo "  - permisos():\n";
-    print_permisos($user1->permisos(), 2);
-
 });
 
 function print_roles($roles, $level = 0)

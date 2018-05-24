@@ -17,7 +17,7 @@ class Iniciativa extends Model
         return $this->belongsToMany('Workflow\Proceso_titulacion');
     }
 
-    public static function crear($user_id, $nombre, $descripcion = '', $producto_esperado = '')
+    public static function crear($proceso_titulacion_id, $user_id, $nombre, $descripcion = '', $producto_esperado = '')
     {
         $iniciativa = Iniciativa::create([
             'nombre' => $nombre,
@@ -27,6 +27,7 @@ class Iniciativa extends Model
             'user_id' => $user_id
         ]);
         $iniciativa->save();
+        Proceso_titulacion::find(1)->iniciativas()->save($iniciativa);
         return $iniciativa;
     }
 
@@ -38,6 +39,6 @@ class Iniciativa extends Model
 
     public function get_estado(){
         $r = new PublicacionIniciativasController();
-        return $r->get_estado($this);
+        return $r->get_status_value($this->estado);
     }
 }

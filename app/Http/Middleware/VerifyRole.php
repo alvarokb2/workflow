@@ -4,6 +4,7 @@ namespace Workflow\Http\Middleware;
 
 use Closure;
 use Auth;
+use Illuminate\Http\Request;
 use Redirect;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,7 @@ class VerifyRole
      * @param  \Closure $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $action = $request->route()->getActionName();
         if (Auth::check()) {
@@ -28,7 +29,6 @@ class VerifyRole
         try {
             $controller = explode('@', $action);
             return app()->call($controller[0] . '@denegated');
-            return is_null($r) ? $next($request) : $r;
         } catch (\Exception $e) {
             return redirect()->back();
         }
