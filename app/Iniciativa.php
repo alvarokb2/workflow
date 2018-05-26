@@ -27,7 +27,7 @@ class Iniciativa extends Model
             'user_id' => $user_id
         ]);
         $iniciativa->save();
-        Proceso_titulacion::find(1)->iniciativas()->save($iniciativa);
+        Proceso_titulacion::find($proceso_titulacion_id)->iniciativas()->save($iniciativa);
         return $iniciativa;
     }
 
@@ -39,6 +39,6 @@ class Iniciativa extends Model
 
     public function get_estado(){
         $r = new PublicacionIniciativasController();
-        return $r->get_status_value($this->estado);
+        return $r->find_status($this->estado)['msg'];
     }
 }

@@ -2,57 +2,19 @@
 
 namespace Workflow\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Iniciativa;
+use Workflow\Http\Controllers\StateMachines\BaseStateMachine;
 
-class PublicacionIniciativasController extends Controller
+class PublicacionIniciativasController extends BaseStateMachine
 {
-    //
-    public function __construct()
-    {
-
-    }
-
-    private static $tabla_estados = [
-        '_' => ['validar_in' => '/^$/', 'validar_out' => '/^$/', 'value' => 'Iniciativa creada con exito'],
-        'a' => ['validar_in' => '/^$|[ce]$/', 'validar_out' => '/a$/', 'value' => 'La iniciativa ha sido actualizada'],
-        'b' => ['validar_in' => '/a$/', 'validar_out' => '/b$/', 'value' => 'La iniciativa ha sido aprobada (DIC)'],
-        'c' => ['validar_in' => '/a$/', 'validar_out' => '/c$/', 'value' => 'La iniciativa presenta observaciones (DIC)'],
-        'd' => ['validar_in' => '/b$/', 'validar_out' => '/d$/', 'value' => 'La iniciativa ha sido aprobada (EI)'],
-        'e' => ['validar_in' => '/b$/', 'validar_out' => '/e$/', 'value' => 'La iniciativa presenta observaciones (EI)'],
-        'f' => ['validar_in' => '/d$/', 'validar_out' => '/f$/', 'value' => 'Iniciativa Publicada'],
-        'g' => ['validar_in' => '/^$|[ce]$/', 'validar_out' => '/g$/', 'value' => 'Iniciativa eliminada con exito'],
+    protected $state_table = [
+        '_' => ['pattern_input' => '/^$/', 'pattern_output' => '/^$/', 'msg' => 'Iniciativa no presenta estados.', 's_msg' => 'Iniciativa creada con éxito.', 'f_msg' => 'No es posible crear la Iniciativa'],
+        'a' => ['pattern_input' => '/^$|[ce]$/', 'pattern_output' => '/a$/', 'msg' => 'Iniciativa actualizada.', 's_msg' => 'Iniciativa actualizada con éxito.', 'f_msg' => 'La iniciativa no puede ser actualizada.'],
+        'b' => ['pattern_input' => '/a$/', 'pattern_output' => '/b$/', 'msg' => 'Iniciativa aprobada (DIC).', 's_msg' => 'Iniciativa aprobada con éxito (DIC).', 'f_msg' => 'La iniciativa no puede ser aprobada (DIC).'],
+        'c' => ['pattern_input' => '/a$/', 'pattern_output' => '/c$/', 'msg' => 'Iniciativa observada (DIC).', 's_msg' => 'Iniciativa observada con éxito (DIC).', 'f_msg' => 'La iniciativa no permite observaciones (DIC).'],
+        'd' => ['pattern_input' => '/b$/', 'pattern_output' => '/d$/', 'msg' => 'Iniciativa aprobada (EI).', 's_msg' => 'Iniciativa aprobada con éxito (EI).', 'f_msg' => 'La iniciativa no puede ser aprobada (EI).'],
+        'e' => ['pattern_input' => '/b$/', 'pattern_output' => '/e$/', 'msg' => 'Iniciativa observada(EI).', 's_msg' => 'Iniciativa observada con éxito (EI).', 'f_msg' => 'La iniciativa no permite observaciones (EI).'],
+        'f' => ['pattern_input' => '/d$/', 'pattern_output' => '/f$/', 'msg' => 'Iniciativa  publicada.', 's_msg' => 'Iniciativa publicada con éxito.', 'f_msg' => 'La iniciativa no puede ser publicada.'],
+        'g' => ['pattern_input' => '/^$|[ce]$/', 'pattern_output' => '/g$/', 'msg' => 'Iniciativa eliminada.', 's_msg' => 'Iniciativa eliminada con éxito.', 'f_msg' => 'No es posible eliminar la Iniciativa.'],
     ];
 
-    public function get_status($estado)
-    {
-        foreach (PublicacionIniciativasController::$tabla_estados as $e) {
-            if (preg_match($e['validar_out'], $estado)) {
-                return $e;
-            }
-        }
-        return null;
-    }
-
-    public function get_status_value($estado)
-    {
-        foreach (PublicacionIniciativasController::$tabla_estados as $e) {
-            if (preg_match($e['validar_out'], $estado)) {
-                return $e['value'];
-            }
-        }
-        return '';
-    }
-
-    public function check_final_status($estado_inicial, $estado_final)
-    {
-        foreach (PublicacionIniciativasController::$tabla_estados as $e) {
-            if (preg_match($e['validar_out'], $estado_final)) {
-                if (preg_match($e['validar_in'], $estado_inicial)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
 }

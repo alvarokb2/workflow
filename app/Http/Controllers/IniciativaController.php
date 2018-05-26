@@ -15,61 +15,6 @@ class IniciativaController extends Controller
         $this->middleware('verify.role');
     }
 
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      *
@@ -83,37 +28,43 @@ class IniciativaController extends Controller
         $iniciativa = Iniciativa::find($id);
         $nuevo_estado = $iniciativa->estado . 'a';
         $p = new PublicacionIniciativasController();
-        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado, $estado)) {
             $iniciativa->nombre = $request->nombre;
             $iniciativa->descripcion = $request->descripcion ?: '';
             $iniciativa->producto_esperado = $request->producto_esperado ?: '';
             $iniciativa->estado = $nuevo_estado;
             $iniciativa->save();
+            session(['msg' => [
+                'class' => 'success',
+                'value' => $estado['s_msg']
+            ]]);
+            return redirect('home');
         }
-        return redirect('home');
+        return $this->denegated($request, $p->get_status('a'));
     }
 
     /**
      * Remove the specified resource from storage.
      *
+     * @param Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         //
         $iniciativa = Iniciativa::find($id);
         $nuevo_estado = $iniciativa->estado . 'g';
         $p = new PublicacionIniciativasController();
-        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado, $estado)) {
             $iniciativa->delete();
+            session(['msg' => [
+                'class' => 'success',
+                'value' => $estado['s_msg']
+            ]]);
+            return redirect('home');
         }
-        return redirect('home');
-    }
-
-    public function denegated()
-    {
-        return response('acceso denefado.');
+        return $this->denegated($request, $p->get_status('g'));
     }
 
     public function validar_dic(Request $request)
@@ -121,11 +72,16 @@ class IniciativaController extends Controller
         $iniciativa = Iniciativa::find($request->id);
         $nuevo_estado = $iniciativa->estado . ($request->value ? 'b' : 'c');
         $p = new PublicacionIniciativasController();
-        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado, $estado)) {
             $iniciativa->estado = $nuevo_estado;
             $iniciativa->save();
+            session(['msg' => [
+                'class' => 'success',
+                'value' => $estado['s_msg']
+            ]]);
+            return redirect('home');
         }
-        return redirect('home');
+        return $this->denegated($request, $p->get_status($request->value ? 'b' : 'c'));
     }
 
     public function validar_ei(Request $request)
@@ -133,11 +89,16 @@ class IniciativaController extends Controller
         $iniciativa = Iniciativa::find($request->id);
         $nuevo_estado = $iniciativa->estado . ($request->value ? 'd' : 'e');
         $p = new PublicacionIniciativasController();
-        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado, $estado)) {
             $iniciativa->estado = $nuevo_estado;
             $iniciativa->save();
+            session(['msg' => [
+                'class' => 'success',
+                'value' => $estado['s_msg']
+            ]]);
+            return redirect('home');
         }
-        return redirect('home');
+        return $this->denegated($request, $p->get_status($request->value ? 'd' : 'e'));
     }
 
     public function publicar(Request $request)
@@ -145,9 +106,30 @@ class IniciativaController extends Controller
         $iniciativa = Iniciativa::find($request->id);
         $nuevo_estado = $iniciativa->estado . 'f';
         $p = new PublicacionIniciativasController();
-        if ($p->check_final_status($iniciativa->estado, $nuevo_estado)) {
+        if ($p->check_final_status($iniciativa->estado, $nuevo_estado, $estado)) {
             $iniciativa->estado = $nuevo_estado;
             $iniciativa->save();
+            session(['msg' => [
+                'class' => 'success',
+                'value' => $estado['s_msg']
+            ]]);
+            return redirect('home');
+        }
+        return $this->denegated($request, $p->find_status('f'));
+    }
+
+    public function denegated($request, $tag)
+    {
+        if (is_null($tag)) {
+            session(['msg' => [
+                'class' => 'danger',
+                'value' => 'denegated access:<br>' . $request->route()->getActionName() . '<br>'
+            ]]);
+        } else {
+            session(['msg' => [
+                'class' => 'danger',
+                'value' => 'failed to update status machine: ' . $tag['f_msg']
+            ]]);
         }
         return redirect('home');
     }

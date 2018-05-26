@@ -28,7 +28,7 @@ class VerifyRole
         }
         $controller = explode('@', $action);
         if (method_exists($controller[0], 'denegated')) {
-            return app()->call($controller[0] . '@denegated');
+            return app()->call($controller[0] . '@denegated', [$request, null]);
         } else {
             return response('Error');
         }
