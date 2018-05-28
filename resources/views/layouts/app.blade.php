@@ -68,6 +68,9 @@
         </nav>
 
         <main class="py-4">
+            @hasRole(['Academicos DIC', 2, 3])
+                <div>verify_role</div>
+            @endHasRole
             @yield('content')
         </main>
     </div>

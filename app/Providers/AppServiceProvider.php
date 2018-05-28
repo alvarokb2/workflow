@@ -3,6 +3,7 @@
 namespace Workflow\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+
+        Blade::directive('hasRole', function ($expression) {
+            $code = "<?php if(Auth::check() && Auth::User()->hasRole($expression)): ?>";
+            return $code;
+        });
+
+        Blade::directive('endHasRole', function(){
+            return "<?php endif ?>";
+        });
     }
 
     /**

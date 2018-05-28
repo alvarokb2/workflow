@@ -38,7 +38,25 @@ class User extends Authenticatable
         return $this->belongsToMany('Workflow\Role');
     }
 
-
+    public function hasRole($value)
+    {
+        if (is_array($value)) {
+            $r = false;
+            foreach ($value as $key){
+                $r = $r || $this->hasRole($key);
+            }
+            return $r;
+        } elseif (is_string($value)) {
+            if (!is_null($instance = $this->roles()->where('name', $value)->first())) {
+                return true;
+            }
+        } elseif (is_int($value)) {
+            if (!is_null($instance = $this->roles()->find($value))) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public static function new_user($name, $email, $password)
     {
